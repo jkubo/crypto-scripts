@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+import os, json, requests, slugify, argparse
+from bs4 import BeautifulSoup
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+#import seaborn as sns
+
+default = 'bitcoin'
+
+def _process_ifc(url='https://www.ifcmarkets.com/en/cryptocurrency-abbreviations'):
+	res_0 = requests.get(url)
+	html = BeautifulSoup(res_0.content, features="lxml")
+	table = pd.DataFrame(np.array(list(map(lambda x:x.text.strip(), html.find(id='equities_table').select('tbody')[0].select('td')))).reshape(49,3), columns=['name', 'ticker', 'symbol'])
+	table['slug'] = table['name'].apply(slugify.slugify)
+	return table
+
+table = _process_ifc()
+slug_to_ticker = lambda slug:table[table['slug']==slug].ticker.values[0]
+ticker_to_slug = lambda ticker:table[table['ticker']==ticker].slug.values[0]
+
+arg = argparse.ArgumentParser()
+arg.add_argument('--verbose', default=False, action='store_true', help='Verbose output')
+arg.add_argument('--slug', default=default, help='Slug (default: %(default)s)')
+
+subs = arg.add_subparsers(dest='source', help='Different source selection')
+
+p_cmc = subs.add_parser('cmc', help='CoinMarketCap')
+p_cmc.add_argument('--limit', default=10, type=int, help='Limit (default: %(default)s)')
+
+p_cd = subs.add_parser('cd', help='CoinDesk')
+p_cd.add_argument('--tag', default='fusion-metadata', help='Tag (default: %(default)s)')
+
+p_yf = subs.add_parser('yf', help='YahooFinance')
+p_yf.add_argument('--tick', default=f"{slug_to_ticker(default)}-USD", help='Slug (overwrite: %(default)s)')
+
+args = arg.parse_args()
+
+match args.source:
+	case 'cmc':
+		url = f"https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?slug={args.slug}&start=1&limit={args.limit}&category=spot&centerType=all&sort=cmc_rank_advanced&direction=desc"
+	case 'cd':
+		url = f"https://www.coindesk.com/price/{args.slug}/"
+	case 'yf':
+		if args.slug != default or args.tick == f"{slug_to_ticker(default)}-USD":
+			args.tick = f"{slug_to_ticker(args.slug)}-USD"
+		url = f"https://query1.finance.yahoo.com/v8/finance/chart/{args.tick}?region=US&lang=en-US&includePrePost=false&interval=2m&useYfid=true&range=1d&corsDomain=finance.yahoo.com&.tsrc=finance"
+
+try:
+	res = requests.get(url, headers={'User-Agent': 'IAMAI', 'From': 'i@m.ai'})
+except:
+	print('Subcommand not selected')
+	os._exit(0)
+
+def _process_cmc():
+	if res.ok:
+		data = json.loads(res.content)
+
+	if int(data['status']['error_code']) == 500:
+		print(f"Error: the slug value `args.slug` was not found")
+		os._exit(1)
+
+	mpv = list(map(lambda x:(x['marketPair'],x['price'],x['volumePercent']), data['data']['marketPairs']))
+	if args.verbose:
+		print(json.dumps(mpv, indent=4))
+
+	v = [vp[2] for vp in mpv]
+	x = [vp[1]*vp[2]/sum(v) for vp in mpv]
+	return (data['data']['symbol'], x)
+
+def _process_cd():
+	if res.ok:
+		html = BeautifulSoup(res.content, features="lxml")
+		data = html.select(f"#{args.tag}")[0].text
+
+	stop_term = 'Fusion.globalContent'
+	vals = eval(str(list(filter(lambda x: x.startswith(stop_term), data.split(';')))))
+	try:
+		dump = json.loads(vals[0].split(f"{stop_term}=")[-1])
+	except:
+		try:
+			dump = json.loads(vals[0].split(f"{stop_term}=")[-1]+'"}]}}')
+		except:
+			raise
+		pass
+	return (dump['asset']['iso'], dump['asset']['ohlc'])
+
+def _process_yf():
+	if res.ok:
+		data = json.loads(res.content)
+	else:
+		print(f"Error: data API unobtainable")
+		os._exit(1)
+	return pd.DataFrame(data['chart']['result'][0]['indicators']['quote'][0], index=pd.to_datetime(data['chart']['result'][0]['timestamp'], unit='s'))
+
+match args.source:
+	case 'cmc':
+		k,V = _process_cmc()
+		print(f"{k}: {sum(V)}")
+	case 'cd':
+		k,D = _process_cd()
+		print(f"{k}: {D}")
+	case 'yf':
+		df = _process_yf()
+		df.filter(['high', 'open', 'close', 'low']).plot.line()
+		#axes = df.plot.line(subplots=True)
+		if args.verbose:
+			print(df)
+		plt.show()
