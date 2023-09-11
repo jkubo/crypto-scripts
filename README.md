@@ -7,7 +7,8 @@ Basic data analysis libraries (i.e. `pandas`, `numpy`, `matplotlib`) are assumed
 
 Other libraries are in `requirements.txt` (i.e. `pip install -r`)
 
-## Arguments
+## bitcheck
+### Arguments
 ```
 usage: bitcheck [-h] [--verbose] [--slug SLUG] {cmc,cd,yf} ...
 
@@ -50,7 +51,19 @@ options:
   --tick TICK  Slug (overwrite: BTC-USD)
 ```
 
+## earnings
+```
+usage: earnings [-h] [--verbose] [--start START] [--end END]
+
+options:
+  -h, --help     show this help message and exit
+  --verbose      Verbose output
+  --start START  From (default: 20230911)
+  --end END      To (default: 20230918)
+```
+
 ## Examples
+### bitcheck
 Graph multiple tickers against JPY:
     
 `for ticker in BTC DOGE; do crypto-scripts/bitcheck yf --tick $ticker-JPY; done`
@@ -69,4 +82,10 @@ BTC: 25896.67140263601
         name ticker symbol      slug
 8    Bitcoin    BTC   ฿, ₿   bitcoin
 12  Dogecoin   DOGE   D, Ɖ  dogecoin
+```
+### earnings
+Save the exported data as CSV:
+```
+% python -i earnings --start 20230901 --end 20230930
+>>> cdf.to_csv(f"{args.start}-{args.end}.csv")
 ```

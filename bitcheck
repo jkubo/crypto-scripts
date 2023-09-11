@@ -44,7 +44,7 @@ match args.source:
 	case 'yf':
 		if args.slug != default or args.tick == f"{slug_to_ticker(default)}-USD":
 			args.tick = f"{slug_to_ticker(args.slug)}-USD"
-		url = f"https://query1.finance.yahoo.com/v8/finance/chart/{args.tick}?region=US&lang=en-US&includePrePost=false&interval=2m&useYfid=true&range=1d&corsDomain=finance.yahoo.com&.tsrc=finance"
+		url = f"https://query1.finance.yahoo.com/v8/finance/chart/{args.tick}?region=US&lang=en-US&includePrePost=false&interval=2m&useYfid=true&range=24h&corsDomain=finance.yahoo.com&.tsrc=finance"
 
 try:
 	res = requests.get(url, headers={'User-Agent': 'IAMAI', 'From': 'i@m.ai'})
