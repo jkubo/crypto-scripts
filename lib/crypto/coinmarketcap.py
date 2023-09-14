@@ -2,6 +2,10 @@ import os, json, requests
 from requests.models import PreparedRequest
 
 def get_market_pairs(slug='bitcoin', url='https://api.coinmarketcap.com', start=1, limit=10):
+	"""
+	:params slug: `str` of ticker slug (ex: bitcoin, dogecoin)
+	:return: `tuple` of slug as ticker `str` and weighted price as `float`
+	"""
 	params = {'category':'spot', 'centerType':'all', 'sort':'cmc_rank_advanced', 'direction':'desc'}
 	params.update({'slug':slug, 'start':start, 'limit': limit})
 	req = PreparedRequest()

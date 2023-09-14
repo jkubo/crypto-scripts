@@ -3,6 +3,10 @@ from datetime import datetime
 import pandas as pd
 
 def get_caldata(date, url='https://www.earningswhispers.com'):
+	"""
+	:params date: `str` of date as YYYYmmdd (ex: 20230101, 20200202)
+	:return: `json` object of API response
+	"""
 	try:
 		datetime.strptime(date, '%Y%m%d')
 	except:
@@ -16,6 +20,11 @@ def get_caldata(date, url='https://www.earningswhispers.com'):
 	return json.loads(res.content)
 
 def get_caldata_range(start, end):
+	"""
+	:params start: `str` of start date as YYYYmmdd (ex: 20230101, 20200202)
+	:params end: `str` of end date as YYYYmmdd (ex: 20230101, 20200202)
+	:return: `pandas.DataFrame` object of multiple calls to `get_caldata` method
+	"""
 	raw_dates = pd.date_range(start, end, freq='D').to_series()
 	df = pd.DataFrame(raw_dates, columns=['dates'])
 	df['dow'] = raw_dates.dt.dayofweek

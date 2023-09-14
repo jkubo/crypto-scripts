@@ -2,6 +2,10 @@ import json, requests
 from bs4 import BeautifulSoup
 
 def get_price(symbol='BTC', url='https://www.coindesk.com'):
+	"""
+	:params symbol: `str` of ticker symbol (ex: BTC, DOGE)
+	:return: `tuple` of symbol as `str` and OHLC as `dict` (char:float)
+	"""
 	res = requests.get(f"{url}/price/BTC/")
 	if res.ok:
 		html = BeautifulSoup(res.content, features="lxml")
