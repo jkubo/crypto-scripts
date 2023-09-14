@@ -1,0 +1,94 @@
+#!/usr/bin/env python3 
+from lib import yfinance, coindesk, coinmc, earnings, nasdaq
+from lib.crypto import slug_to_ticker, ticker_to_slug
+import os, argparse
+from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
+import plotly.figure_factory
+
+class defaults:
+	prefix = f"{os.path.expanduser('~')}/Downloads/"
+	suffix = f"{datetime.now().strftime('%s')}.csv"
+	crypto = 'bitcoin'
+	stock  = 'nvda'
+	start_date = datetime.now().strftime('%Y%m%d')
+	end_date = (datetime.now()+timedelta(days=7)).strftime('%Y%m%d')
+
+if __name__ == '__main__':
+	arg = argparse.ArgumentParser()
+	arg.add_argument('-v', '--verbose', default=False, action='store_true', help='Verbose output')
+	arg.add_argument('-e', '--export', default=False, action='store_true', help='Export output to downloads folder')
+	subs = arg.add_subparsers(dest='source', help='Different source selection')
+	# Yahoo Finance
+	sub_yf = subs.add_parser('yf', help='Yahoo Finance')
+	sub_yf.add_argument('--ticker', default=f"{slug_to_ticker(defaults.crypto)}-USD", help='Ticker (default: %(default)s)')
+	sub_yf.add_argument('--range', default='24h', help='Time Range (default: %(default)s)')
+	# CoinMarketCap
+	sub_cm = subs.add_parser('cm', help='CoinMarketCap')
+	sub_cm.add_argument('--slug', default=defaults.crypto, help='Slug (default: %(default)s)')
+	sub_cm.add_argument('--limit', default=10, type=int, help='Limit (default: %(default)s)')
+	# CoinDesk
+	sub_cd = subs.add_parser('cd', help='CoinDesk')
+	sub_cd.add_argument('--symbol', default=slug_to_ticker(defaults.crypto), help='Symbol (default: %(default)s)')
+	# Earnings Whispers
+	sub_ew = subs.add_parser('ew', help='Earnings Whispers')
+	sub_ew.add_argument('--start', default=defaults.start_date, help='From (default: %(default)s)')
+	sub_ew.add_argument('--end', default=defaults.end_date, help='To (default: %(default)s)')
+	# NASDAQ
+	sub_nd = subs.add_parser('nd', help='NASDAQ')
+	sub_nd.add_argument('--ticker', default=defaults.stock, help='Ticker (default: %(default)s)')
+	sub_nd.add_argument('--limit', default=30, help='Limit (default: %(default)s)')
+	args = arg.parse_args()
+
+	match args.source:
+		case 'yf':
+			try:
+				df = yfinance.get_timeseries(args.ticker, range=args.range)
+			except:
+				print(f"Could not find timeseries data for {args.ticker} in {args.range}")
+				os._exit(1)
+			fig = plotly.figure_factory.create_candlestick(df.open, df.high, df.low, df.close, dates=df.index)
+			fig.show()
+			if args.verbose:
+				print(df)
+			if args.export:
+				df.to_csv(f"{defaults.prefix}/YahooFinance_{args.ticker}-{args.range}_{defaults.suffix}")
+		case 'cm':
+			try:
+				k,V = coinmc.get_market_pairs(ticker_to_slug(args.slug) if args.slug.isupper() else args.slug)
+			except:
+				print(f"Could not find price for the slug {args.slug}")
+				os._exit(1)
+			print(f"{k}: {sum(V)}")
+			if args.export and args.verbose:
+				print('Export option unavailable for this command')
+		case 'cd':
+			try:
+				args.symbol = slug_to_ticker(args.symbol) if args.symbol.islower() else args.symbol
+				k,D = coindesk.get_price(args.symbol)
+			except:
+				print(f"Could not find price for the symbol {args.symbol}")
+				os._exit(1)
+			print(f"{k}: {D}")
+			if args.export and args.verbose:
+				print('Export option unavailable for this command')
+		case 'ew':
+			try:
+				df = earnings.get_caldata_range(args.start, args.end)
+			except:
+				print(f"Could not get earnings information between {args.start} and {args.end}")
+				os._exit(1)
+			if args.verbose:
+				print(df)
+			if args.export:
+				df.to_csv(f"{defaults.prefix}/EarningsWhisper_{args.start}-{args.end}_{defaults.suffix}")
+		case 'nd':
+			try:
+				df = nasdaq.get_insider_trades(args.ticker, limit=args.limit)
+			except:
+				print(f"Could not get insider trades for {args.ticker} with limit of {args.limit}")
+				os._exit(1)
+			if args.verbose:
+				print(df)
+			if args.export:
+				df.to_csv(f"{defaults.prefix}/NASDAQ_{args.ticker}-{args.limit}_{defaults.suffix}")
