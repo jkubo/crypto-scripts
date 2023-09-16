@@ -37,6 +37,19 @@ def get_congress_trading(url='https://www.quiverquant.com/congresstrading/'):
         active_traders = dfs[1]
     return result
 
+def get_senate_trading(url='https://www.quiverquant.com/sources/senatetrading'):
+    dfs = _convert_tables_to_dataframes(url)
+    class result:
+        recent_trades = dfs[0]
+    return result
+
+def get_house_trading(url='https://www.quiverquant.com/sources/housetrading'):
+    dfs = _convert_tables_to_dataframes(url)
+    class result:
+        recent_trades = dfs[0]
+        recent_trades_options = dfs[1]
+    return result
+
 def get_dc_insider_scores(url='https://www.quiverquant.com/scores/dcinsider'):
     dfs = _convert_tables_to_dataframes(url)
     class result:
@@ -60,4 +73,22 @@ def get_inflation(url='https://www.quiverquant.com/inflation/'):
     dfs = _convert_tables_to_dataframes(url)
     class result:
         inflation_risk_score = dfs[0]
+    return result
+
+def get_insiders(url='https://www.quiverquant.com/insiders/'):
+    dfs = _convert_tables_to_dataframes(url)
+    class result:
+        recent_activity = dfs[0]
+    return result
+
+def get_insider_tracker(url='https://www.quiverquant.com/insidertracker/'):
+    dfs = _convert_tables_to_dataframes(url)
+    class result:
+        notable_insiders = dfs[0]
+    return result
+
+def get_stock_splits(url='https://www.quiverquant.com/stocksplits/'):
+    dfs = _convert_tables_to_dataframes(url)
+    class result:
+        recent_8k_filings = dfs[0]
     return result

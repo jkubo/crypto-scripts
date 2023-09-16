@@ -47,10 +47,15 @@ if __name__ == '__main__':
 	sub_qq = subs.add_parser('qq', help='Quiver Quantitative')
 	group_qq = sub_qq.add_mutually_exclusive_group(required=True)
 	group_qq.add_argument('-c', '--congress', default=False, action='store_true', help='US Congress trading')
+	group_qq.add_argument('-s', '--senate', default=False, action='store_true', help='US Senate trading')
+	group_qq.add_argument('-r', '--house', default=False, action='store_true', help='US House of Representatives trading')
 	group_qq.add_argument('-d', '--dcinsider', default=False, action='store_true', help='DC Insider scores')
 	group_qq.add_argument('-g', '--govcontract', default=False, action='store_true', help='US Government contracts')
 	group_qq.add_argument('-l', '--lobbying', default=False, action='store_true', help='Lobbying')
-	group_qq.add_argument('-i', '--inflation', default=False, action='store_true', help='Inflation')
+	group_qq.add_argument('--inflation', default=False, action='store_true', help='Inflation')
+	group_qq.add_argument('--insiders', default=False, action='store_true', help='Insiders')
+	group_qq.add_argument('--insidertracker', default=False, action='store_true', help='Insider tracker')
+	group_qq.add_argument('--stocksplits', default=False, action='store_true', help='Stock splits')
 	args = arg.parse_args()
 
 	match args.source:
@@ -118,6 +123,10 @@ if __name__ == '__main__':
 		case 'qq':
 			if args.congress:
 				res = quiverquant.get_congress_trading()
+			if args.senate:
+				res = quiverquant.get_senate_trading()
+			if args.house:
+				res = quiverquant.get_house_trading()
 			if args.dcinsider:
 				res = quiverquant.get_dc_insider_scores()
 			if args.govcontract:
@@ -126,6 +135,12 @@ if __name__ == '__main__':
 				res = quiverquant.get_lobbying()
 			if args.inflation:
 				res = quiverquant.get_inflation()
+			if args.insiders:
+				res = quiverquant.get_insiders()
+			if args.insidertracker:
+				res = quiverquant.get_insider_tracker()
+			if args.stocksplits:
+				res = quiverquant.get_stock_splits()
 			res_dict = {x:res.__dict__[x] for x in res.__dict__ if not x.startswith('_')}
 			if args.verbose:
 				for k,v in res_dict.items():

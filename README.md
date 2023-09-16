@@ -35,9 +35,9 @@ usage: mkisctl cc [-h] (-s STOCK | -c CRYPTO)
 options:
   -h, --help            show this help message and exit
   -s STOCK, --stock STOCK
-                        Stock
+                        Requires specifying stock (example: NVDA)
   -c CRYPTO, --crypto CRYPTO
-                        Crypto
+                        Requires specifying crypto (example: bitcoin)
 ```
 
 ### Yahoo Finance (`mkisctl yf`)
@@ -98,15 +98,20 @@ options:
 
 ### Quiver Quant (`mkisctl qq`)
 ```
-usage: mkisctl qq [-h] (-c | -d | -g | -l | -i)
+usage: mkisctl qq [-h] (-c | -s | -r | -d | -g | -l | --inflation | --insiders | --insidertracker | --stocksplits)
 
 options:
   -h, --help         show this help message and exit
   -c, --congress     US Congress trading
+  -s, --senate       US Senate trading
+  -r, --house        US House of Representatives trading
   -d, --dcinsider    DC Insider scores
   -g, --govcontract  US Government contracts
   -l, --lobbying     Lobbying
-  -i, --inflation    Inflation
+  --inflation        Inflation
+  --insiders         Insiders
+  --insidertracker   Insider tracker
+  --stocksplits      Stock splits
 ```
 
 ## Examples
