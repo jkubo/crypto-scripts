@@ -109,8 +109,7 @@ options:
   -g, --govcontract  US Government contracts
   -l, --lobbying     Lobbying
   --inflation        Inflation
-  --insiders         Insiders
-  --insidertracker   Insider tracker
+  -i, --insiders         Insiders
   --stocksplits      Stock splits
 ```
 

@@ -53,8 +53,8 @@ if __name__ == '__main__':
 	group_qq.add_argument('-g', '--govcontract', default=False, action='store_true', help='US Government contracts')
 	group_qq.add_argument('-l', '--lobbying', default=False, action='store_true', help='Lobbying')
 	group_qq.add_argument('--inflation', default=False, action='store_true', help='Inflation')
-	group_qq.add_argument('--insiders', default=False, action='store_true', help='Insiders')
-	group_qq.add_argument('--insidertracker', default=False, action='store_true', help='Insider tracker')
+	group_qq.add_argument('-i', '--insiders', default=False, action='store_true', help='Insiders')
+	# group_qq.add_argument('--insidertracker', default=False, action='store_true', help='Insider tracker')
 	group_qq.add_argument('--stocksplits', default=False, action='store_true', help='Stock splits')
 	args = arg.parse_args()
 
@@ -137,8 +137,8 @@ if __name__ == '__main__':
 				res = quiverquant.get_inflation()
 			if args.insiders:
 				res = quiverquant.get_insiders()
-			if args.insidertracker:
-				res = quiverquant.get_insider_tracker()
+			# if args.insidertracker:
+			# 	res = quiverquant.get_insider_tracker()
 			if args.stocksplits:
 				res = quiverquant.get_stock_splits()
 			res_dict = {x:res.__dict__[x] for x in res.__dict__ if not x.startswith('_')}
