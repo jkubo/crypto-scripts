@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 def get_price(symbol='BTC', url='https://www.coindesk.com'):
 	"""
 	:params symbol: `str` of ticker symbol (ex: BTC, DOGE)
-	:return: `tuple` of symbol as `str` and OHLC as `dict` (char:float)
+	:return: `class` object with ISO symbol as `str` and OHLC as `dict` (char:float)
 	"""
 	res = requests.get(f"{url}/price/BTC/")
 	if res.ok:
@@ -20,4 +20,7 @@ def get_price(symbol='BTC', url='https://www.coindesk.com'):
 		except:
 			raise
 		pass
-	return (dump['prices'][symbol]['iso'], dump['prices'][symbol]['ohlc'])
+	class result:
+		iso = dump['prices'][symbol]['iso']
+		ohlc = dump['prices'][symbol]['ohlc']
+	return result

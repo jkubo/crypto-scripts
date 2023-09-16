@@ -9,69 +9,104 @@ Other libraries are in `requirements.txt` (i.e. `pip install -r`)
 ## Arguments
 ### `mkisctl`
 ```
-usage: mkisctl [-h] [-v] [-e] {yf,cm,cd,ew,nd} ...
+usage: mkisctl [-h] [-v] [-e] {cc,yf,cm,cd,ew,nd,qq} ...
 
 positional arguments:
-  {yf,cm,cd,ew,nd}  Different source selection
-    yf              Yahoo Finance
-    cm              CoinMarketCap
-    cd              CoinDesk
-    ew              Earnings Whispers
-    nd              NASDAQ
+  {cc,yf,cm,cd,ew,nd,qq}
+                        Different source selection
+    cc                  CoinCodex
+    yf                  Yahoo Finance
+    cm                  CoinMarketCap
+    cd                  CoinDesk
+    ew                  Earnings Whispers
+    nd                  NASDAQ
+    qq                  Quiver Quantitative
 
 options:
-  -h, --help        show this help message and exit
-  -v, --verbose     Verbose output
-  -e, --export      Export output to downloads folder
+  -h, --help            show this help message and exit
+  -v, --verbose         Verbose output
+  -e, --export          Export output to downloads folder
+```
+
+### CoinCodex (`mkisctl cc`)
+```
+usage: mkisctl cc [-h] (-s STOCK | -c CRYPTO)
+
+options:
+  -h, --help            show this help message and exit
+  -s STOCK, --stock STOCK
+                        Stock
+  -c CRYPTO, --crypto CRYPTO
+                        Crypto
 ```
 
 ### Yahoo Finance (`mkisctl yf`)
 ```
-usage: mkisctl yf [-h] [--ticker TICKER] [--range RANGE]
+usage: mkisctl yf [-h] [-t TICKER] [-r RANGE]
 
 options:
-  -h, --help       show this help message and exit
-  --ticker TICKER  Ticker (default: BTC-USD)
-  --range RANGE    Time Range (default: 24h)
+  -h, --help            show this help message and exit
+  -t TICKER, --ticker TICKER
+                        Ticker (default: BTC-USD)
+  -r RANGE, --range RANGE
+                        Time Range (default: 24h)
 ```
 
 ### CoinMarketCap (`mkisctl cm`)
 ```
-usage: mkisctl cm [-h] [--slug SLUG] [--limit LIMIT]
+usage: mkisctl cm [-h] [-s SLUG] [-l LIMIT]
 
 options:
-  -h, --help     show this help message and exit
-  --slug SLUG    Slug (default: bitcoin)
-  --limit LIMIT  Limit (default: 10)
+  -h, --help            show this help message and exit
+  -s SLUG, --slug SLUG  Slug (default: bitcoin)
+  -l LIMIT, --limit LIMIT
+                        Limit (default: 10)
 ```
 
 ### CoinDesk (`mkisctl cd`)
 ```
-usage: mkisctl cd [-h] [--symbol SYMBOL]
+usage: mkisctl cd [-h] [-s SYMBOL]
 
 options:
-  -h, --help       show this help message and exit
-  --symbol SYMBOL  Symbol (default: BTC)
+  -h, --help            show this help message and exit
+  -s SYMBOL, --symbol SYMBOL
+                        Symbol (default: BTC)
 ```
 
 ### Earnings Whispers (`mkisctl ew`)
 ```
-usage: mkisctl ew [-h] [--start START] [--end END]
+usage: mkisctl ew [-h] [-s START] [-e END]
 
 options:
-  -h, --help     show this help message and exit
-  --start START  From (default: 20230913)
-  --end END      To (default: 20230920)
+  -h, --help            show this help message and exit
+  -s START, --start START
+                        From (default: 20230915)
+  -e END, --end END     To (default: 20230922)
 ```
 
 ### NASDAQ (`mkisctl nd`)
 ```
-usage: mkisctl nd [-h] [--ticker TICKER] [--limit LIMIT]
+usage: mkisctl nd [-h] [-t TICKER] [-l LIMIT]
 
 options:
-  -h, --help       show this help message and exit
-  --ticker TICKER  Ticker (default: nvda)
-  --limit LIMIT    Limit (default: 30)
+  -h, --help            show this help message and exit
+  -t TICKER, --ticker TICKER
+                        Ticker (default: nvda)
+  -l LIMIT, --limit LIMIT
+                        Limit (default: 30)
+```
+
+### Quiver Quant (`mkisctl qq`)
+```
+usage: mkisctl qq [-h] (-c | -d | -g | -l | -i)
+
+options:
+  -h, --help         show this help message and exit
+  -c, --congress     US Congress trading
+  -d, --dcinsider    DC Insider scores
+  -g, --govcontract  US Government contracts
+  -l, --lobbying     Lobbying
+  -i, --inflation    Inflation
 ```
 
 ## Examples
@@ -110,7 +145,16 @@ DOGE: {'o': 0.0611061372, 'h': 0.0621485196, 'l': 0.0607435794, 'c': 0.061567502
                 insider  relation    lastDate                transactionType   ownType sharesTraded lastPrice sharesHeld
 ```
 
-5) Check the IFC table for abbreviations:
+5) Verbose output of congress trading
+
+`./mkisctl -v qq -c`
+
+```
+# recent_trades
+                                                 Stock                    Transaction                  Politician  ...         Traded Description        
+```
+
+6) Check the IFC table for abbreviations:
 
 `python -i mkisctl`
 

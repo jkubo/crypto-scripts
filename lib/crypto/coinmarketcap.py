@@ -19,4 +19,7 @@ def get_market_pairs(slug='bitcoin', url='https://api.coinmarketcap.com', start=
 	mpv = list(map(lambda x:(x['marketPair'],x['price'],x['volumePercent']), data['data']['marketPairs']))
 	v = [vp[2] for vp in mpv]
 	x = [vp[1]*vp[2]/sum(v) for vp in mpv]
-	return (data['data']['symbol'], x)
+	class result:
+		symbol = data['data']['symbol']
+		prices = x
+	return result

@@ -2,7 +2,7 @@ import os, json, requests
 from datetime import datetime
 import pandas as pd
 
-def get_caldata(date, url='https://www.earningswhispers.com'):
+def _get_caldata(date, url='https://www.earningswhispers.com'):
 	"""
 	:params date: `str` of date as YYYYmmdd (ex: 20230101, 20200202)
 	:return: `json` object of API response
@@ -29,4 +29,4 @@ def get_caldata_range(start, end):
 	df = pd.DataFrame(raw_dates, columns=['dates'])
 	df['dow'] = raw_dates.dt.dayofweek
 	dates = list(map(lambda d: d.astype(str).split('T')[0].replace('-',''), df[df['dow']<5].dates.values))
-	return pd.concat(list(map(pd.DataFrame, map(get_caldata, dates)))).reset_index(drop=True)
+	return pd.concat(list(map(pd.DataFrame, map(_get_caldata, dates)))).reset_index(drop=True)
