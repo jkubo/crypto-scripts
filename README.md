@@ -98,7 +98,7 @@ options:
 
 ### Quiver Quant (`mkisctl qq`)
 ```
-usage: mkisctl qq [-h] (-c | -s | -r | -d | -g | -l | --inflation | --insiders | --insidertracker | --stocksplits)
+usage: mkisctl qq [-h] (-c | -s | -r | -d | -g | -l | -q | -i | -z)
 
 options:
   -h, --help         show this help message and exit
@@ -108,9 +108,9 @@ options:
   -d, --dcinsider    DC Insider scores
   -g, --govcontract  US Government contracts
   -l, --lobbying     Lobbying
-  --inflation        Inflation
-  -i, --insiders         Insiders
-  --stocksplits      Stock splits
+  -q, --inflation    Inflation
+  -i, --insiders     Insiders
+  -z, --stocksplits  Stock splits
 ```
 
 ## Examples

@@ -52,10 +52,10 @@ if __name__ == '__main__':
 	group_qq.add_argument('-d', '--dcinsider', default=False, action='store_true', help='DC Insider scores')
 	group_qq.add_argument('-g', '--govcontract', default=False, action='store_true', help='US Government contracts')
 	group_qq.add_argument('-l', '--lobbying', default=False, action='store_true', help='Lobbying')
-	group_qq.add_argument('--inflation', default=False, action='store_true', help='Inflation')
+	group_qq.add_argument('-q', '--inflation', default=False, action='store_true', help='Inflation')
 	group_qq.add_argument('-i', '--insiders', default=False, action='store_true', help='Insiders')
 	# group_qq.add_argument('--insidertracker', default=False, action='store_true', help='Insider tracker')
-	group_qq.add_argument('--stocksplits', default=False, action='store_true', help='Stock splits')
+	group_qq.add_argument('-z', '--stocksplits', default=False, action='store_true', help='Stock splits')
 	args = arg.parse_args()
 
 	match args.source:
