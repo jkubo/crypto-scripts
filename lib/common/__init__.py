@@ -1,1 +1,1 @@
-from . import coincodex, yahoofinance
+from . import coincodex, unusualwhales, yahoofinance

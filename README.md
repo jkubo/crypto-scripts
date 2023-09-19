@@ -9,18 +9,19 @@ Other libraries are in `requirements.txt` (i.e. `pip install -r`)
 ## Arguments
 ### `mkisctl`
 ```
-usage: mkisctl [-h] [-v] [-e] {cc,yf,cm,cd,ew,nd,qq} ...
+usage: mkisctl [-h] [-v] [-e] {cc,uw,yf,cm,cd,ew,nd,qq} ...
 
 positional arguments:
-  {cc,yf,cm,cd,ew,nd,qq}
+  {cc,uw,yf,cm,cd,ew,nd,qq}
                         Different source selection
-    cc                  CoinCodex
-    yf                  Yahoo Finance
-    cm                  CoinMarketCap
-    cd                  CoinDesk
-    ew                  Earnings Whispers
-    nd                  NASDAQ
-    qq                  Quiver Quantitative
+    cc                  CoinCodex (Source: coincodex.com)
+    uw                  Unusual Whales (Source: unusualwhales.com)
+    yf                  Yahoo Finance (Source: finance.yahoo.com)
+    cm                  CoinMarketCap (Source: coinmarketcap.com)
+    cd                  CoinDesk (Source: coindesk.com)
+    ew                  Earnings Whispers (Source: earningswhispers.com)
+    nd                  NASDAQ (Source: nasdaq.com)
+    qq                  Quiver Quantitative (Source: quiverquant.com)
 
 options:
   -h, --help            show this help message and exit
@@ -38,6 +39,19 @@ options:
                         Requires specifying stock (example: NVDA)
   -c CRYPTO, --crypto CRYPTO
                         Requires specifying crypto (example: bitcoin)
+```
+
+### Unusual Whales (`mkisctl uw`)
+```
+usage: mkisctl uw [-h] [-o] [-m] [-c] [-t TICKER]
+
+options:
+  -h, --help            show this help message and exit
+  -o, --option          Option information (default: False)
+  -m, --market          Market information (default: False)
+  -c, --crypto          Crypto information (default: False)
+  -t TICKER, --ticker TICKER
+                        Company/Ticker information
 ```
 
 ### Yahoo Finance (`mkisctl yf`)
@@ -98,13 +112,14 @@ options:
 
 ### Quiver Quant (`mkisctl qq`)
 ```
-usage: mkisctl qq [-h] (-c | -s | -r | -d | -g | -l | -q | -i | -z)
+usage: mkisctl qq [-h] (-c | -s | -r | -e | -d | -g | -l | -q | -i | -z)
 
 options:
   -h, --help         show this help message and exit
   -c, --congress     US Congress trading
   -s, --senate       US Senate trading
   -r, --house        US House of Representatives trading
+  -e, --election     Election contributions
   -d, --dcinsider    DC Insider scores
   -g, --govcontract  US Government contracts
   -l, --lobbying     Lobbying

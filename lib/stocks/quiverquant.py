@@ -50,6 +50,13 @@ def get_house_trading(url='https://www.quiverquant.com/sources/housetrading'):
         recent_trades_options = dfs[1]
     return result
 
+def get_election_contributions(url='https://www.quiverquant.com/election-contributions/'):
+    dfs = _convert_tables_to_dataframes(url)
+    class result:
+        pac_donations = dfs[0]
+        employee_donations = dfs[1]
+    return result
+
 def get_dc_insider_scores(url='https://www.quiverquant.com/scores/dcinsider'):
     dfs = _convert_tables_to_dataframes(url)
     class result:

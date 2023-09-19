@@ -17,6 +17,6 @@ def get_timeseries(ticker, url='https://query1.finance.yahoo.com', region='US', 
 	if res.ok:
 		data = json.loads(res.content)
 	else:
-		print(f"Error: data API unobtainable")
+		print(f"Data unobtainable from API")
 		os._exit(1)
 	return pd.DataFrame(data['chart']['result'][0]['indicators']['quote'][0], index=pd.to_datetime(data['chart']['result'][0]['timestamp'], unit='s'))
