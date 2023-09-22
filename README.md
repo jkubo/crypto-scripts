@@ -1,15 +1,13 @@
-# Market Insight
-CLI tool to obtain some basic information for cryptocurrency and stock market activities.
+# Dipylon
+Gateway for financial markets information from various online resources
 
-## Requirements
-Basic data analysis libraries (i.e. `pandas`, `numpy`, `matplotlib`) are assumed to be installed.
-
-Other libraries are in `requirements.txt` (i.e. `pip install -r`)
+## Installation
+`pip install dipylon`
 
 ## Arguments
-### `mkisctl`
+### `dipylon`
 ```
-usage: mkisctl [-h] [-v] [-e] {cc,uw,yf,cm,cd,ew,nd,qq} ...
+usage: dipylon [-h] [-v] [-e] {cc,uw,yf,cm,cd,ew,nd,qq} ...
 
 positional arguments:
   {cc,uw,yf,cm,cd,ew,nd,qq}
@@ -29,9 +27,9 @@ options:
   -e, --export          Export output to downloads folder
 ```
 
-### CoinCodex (`mkisctl cc`)
+### CoinCodex (`dipylon cc`)
 ```
-usage: mkisctl cc [-h] (-s STOCK | -c CRYPTO)
+usage: dipylon cc [-h] (-s STOCK | -c CRYPTO)
 
 options:
   -h, --help            show this help message and exit
@@ -41,9 +39,9 @@ options:
                         Requires specifying crypto (example: bitcoin)
 ```
 
-### Unusual Whales (`mkisctl uw`)
+### Unusual Whales (`dipylon uw`)
 ```
-usage: mkisctl uw [-h] [-o] [-m] [-c] [-t TICKER]
+usage: dipylon uw [-h] [-o] [-m] [-c] [-t TICKER]
 
 options:
   -h, --help            show this help message and exit
@@ -54,9 +52,9 @@ options:
                         Company/Ticker information
 ```
 
-### Yahoo Finance (`mkisctl yf`)
+### Yahoo Finance (`dipylon yf`)
 ```
-usage: mkisctl yf [-h] [-t TICKER] [-r RANGE]
+usage: dipylon yf [-h] [-t TICKER] [-r RANGE]
 
 options:
   -h, --help            show this help message and exit
@@ -66,9 +64,9 @@ options:
                         Time Range (default: 24h)
 ```
 
-### CoinMarketCap (`mkisctl cm`)
+### CoinMarketCap (`dipylon cm`)
 ```
-usage: mkisctl cm [-h] [-s SLUG] [-l LIMIT]
+usage: dipylon cm [-h] [-s SLUG] [-l LIMIT]
 
 options:
   -h, --help            show this help message and exit
@@ -77,9 +75,9 @@ options:
                         Limit (default: 10)
 ```
 
-### CoinDesk (`mkisctl cd`)
+### CoinDesk (`dipylon cd`)
 ```
-usage: mkisctl cd [-h] [-s SYMBOL]
+usage: dipylon cd [-h] [-s SYMBOL]
 
 options:
   -h, --help            show this help message and exit
@@ -87,9 +85,9 @@ options:
                         Symbol (default: BTC)
 ```
 
-### Earnings Whispers (`mkisctl ew`)
+### Earnings Whispers (`dipylon ew`)
 ```
-usage: mkisctl ew [-h] [-s START] [-e END]
+usage: dipylon ew [-h] [-s START] [-e END]
 
 options:
   -h, --help            show this help message and exit
@@ -98,9 +96,9 @@ options:
   -e END, --end END     To (default: 20230922)
 ```
 
-### NASDAQ (`mkisctl nd`)
+### NASDAQ (`dipylon nd`)
 ```
-usage: mkisctl nd [-h] [-t TICKER] [-l LIMIT]
+usage: dipylon nd [-h] [-t TICKER] [-l LIMIT]
 
 options:
   -h, --help            show this help message and exit
@@ -110,9 +108,9 @@ options:
                         Limit (default: 30)
 ```
 
-### Quiver Quant (`mkisctl qq`)
+### Quiver Quant (`dipylon qq`)
 ```
-usage: mkisctl qq [-h] (-c | -s | -r | -e | -d | -g | -l | -q | -i | -z)
+usage: dipylon qq [-h] (-c | -s | -r | -e | -d | -g | -l | -q | -i | -z)
 
 options:
   -h, --help         show this help message and exit
@@ -129,19 +127,19 @@ options:
 ```
 
 ## Examples
-Note: all examples below assume user is running the commands from the `market-insight` directory.
+Note: all examples below assume user is installed the module.
 
 Remark: Optionally, user may consider adding the directory to the PATH environment variable to omit the `./`.
 
 1) Graph multiple tickers against JPY:
     
-`for ticker in BTC DOGE; do ./mkisctl yf --ticker $ticker-JPY; done`
+`for ticker in BTC DOGE; do dipylon yf --ticker $ticker-JPY; done`
 
 *_opens multiple tabs of graphs on default browser_
 
 2) Display multple OHLC prices with symbol:
 
-`for ticker in BTC DOGE; do ./mkisctl cd --symbol $ticker; done`
+`for ticker in BTC DOGE; do dipylon cd --symbol $ticker; done`
 
 ```
 BTC: {'o': 25904.4255622, 'h': 26535, 'l': 25842.8, 'c': 26273}
@@ -150,7 +148,7 @@ DOGE: {'o': 0.0611061372, 'h': 0.0621485196, 'l': 0.0607435794, 'c': 0.061567502
 
 3) Print out earnings information for one day: (output has been omiited)
 
-`./mkisctl -v ew --start 20230913 --end 20230913`
+`dipylon -v ew --start 20230913 --end 20230913`
 
 ```
    ticker                                 company  total          nextEPSDate  releaseTime  ...   qSales   eps  surprise  revenue direction
@@ -158,7 +156,7 @@ DOGE: {'o': 0.0611061372, 'h': 0.0621485196, 'l': 0.0607435794, 'c': 0.061567502
 
 4) Export and print out insider trades: (output has been omiited)
 
-`./mkisctl -ev nd`
+`dipylon -ev nd`
 
 ```
                 insider  relation    lastDate                transactionType   ownType sharesTraded lastPrice sharesHeld
@@ -166,7 +164,7 @@ DOGE: {'o': 0.0611061372, 'h': 0.0621485196, 'l': 0.0607435794, 'c': 0.061567502
 
 5) Verbose output of congress trading
 
-`./mkisctl -v qq -c`
+`dipylon -v qq -c`
 
 ```
 # recent_trades
@@ -175,7 +173,7 @@ DOGE: {'o': 0.0611061372, 'h': 0.0621485196, 'l': 0.0607435794, 'c': 0.061567502
 
 6) Check the IFC table for abbreviations:
 
-`python -i mkisctl`
+`python -i dipylon`
 
 ```
 >>> from lib.crypto import table

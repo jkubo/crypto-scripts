@@ -1,2 +1,8 @@
-*.pyc
+# development folder
 .devignore
+
+# package build
+*.pyc
+build
+dist
+dipylon.egg-info
